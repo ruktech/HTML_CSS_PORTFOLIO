@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.flag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+.flag .black {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 33vh;
+    background-color: black;
+    transform: scaleX(0);
+    animation: colorScale 1s linear forwards;
+    transform-origin: left;
+}
+.flag .red {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 45vw;
+    background-color: red;
+    clip-path: polygon(0 0, 0 100%, 100% 49%);
+    transform: scaleX(0);
+    animation: colorScale 1s linear forwards;
+    transform-origin: left;
+    animation-delay: 1s;
+    
+}
+.flag .white {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 33vh;
+    background-color: white;
+    /* transform: scaleX(0); */
+}
+.flag .green {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 33vh;
+    background-color: green;
+    transform: scaleX(0);
+    animation: colorScale 1s linear forwards;
+    transform-origin: right;
+}
+.stardiv {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    z-index: 1;
+    animation: fadeIn 0.5s linear forwards;
+    animation-delay: 2s;
+}
+.red img{
+    width: 5em;
+    animation: rotate 20s linear infinite;
+}
+
+/* Keyframes */
+
+@keyframes colorScale {
+    0%{
+        transform: scaleX(0);
+    }
+    100%{
+        transform: scaleX(1);
+    }
+}
+
+@keyframes rotate {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes fadeIn {
+    0%{
+        transform: translate(-50%, -50%) scale(5);
+        opacity: 0;
+    }
+    100%{
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}

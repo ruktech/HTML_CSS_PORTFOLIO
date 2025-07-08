@@ -1,0 +1,107 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 9fr 1fr;
+    justify-items: flex-start;
+}
+
+table {
+    border-spacing: 0;
+    color: #000;
+    border-collapse: collapse;
+}
+aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.whtItems tr:nth-child(-n+3) td {
+    padding-top: 10px;
+}
+aside table {
+    border-collapse: collapse;
+    border-spacing: 0;
+} 
+aside table td {
+    width: 30px;
+    height: 30px;
+}
+aside table:first-child tr:last-child td {
+    padding-top: 40px;
+}
+img{
+    width: 30px;
+}
+
+td {
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    /* manage background image */
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+tr:not(:first-child, :last-child) td:not(:first-child, :last-child) {
+    background-color: #de5b9e;
+}
+
+tr:nth-child(odd):not(:first-child) td:nth-child(odd):not(:first-child) {
+    background-color: #0461a7;
+}
+
+tr:nth-child(even):not(:last-child) td:nth-child(even):not(:last-child) {
+    background-color: #0461a7;
+}
+
+table tr:not(:first-child, :last-child) td:not(:first-child, :last-child){
+    border: 1px solid #000;
+}
+
+/* Chess Items */
+.whiteSoldier {
+    background-image: url('/imgs/12.png');
+}
+.blackSoldier {
+    background-image: url('/imgs/11.png'); 
+}
+.whiteHorse {
+    background-image: url('/imgs/10.png');
+}
+.blackHorse {
+    background-image: url('/imgs/9.png');
+}
+.whiteQueen {
+    background-image: url('/imgs/8.png');
+}
+.blackQueen {
+    background-image: url('/imgs/7.png');
+}
+.blackKing {
+    background-image: url('/imgs/5.png');
+}
+.whiteKing {
+    background-image: url('/imgs/6.png');
+}
+.blackEleph {
+    background-image: url('/imgs/3.png');
+}
+.whiteEleph {
+    background-image: url('/imgs/4.png');
+}
+.blackCastle {
+    background-image: url('/imgs/1.png');
+}
+.whiteCastle {
+    background-image: url('/imgs/2.png');
+}

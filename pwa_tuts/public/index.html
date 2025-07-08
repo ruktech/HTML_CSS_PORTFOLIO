@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Food Ninja</title>
+    <!-- materialize icons, css & js -->
+    <link type="text/css" href="/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" href="/css/styles.css" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/img/icons/icon-96x96.png">
+    <meta name="apple-mobile-web-app-status-bar" content="#FFE1C4">
+    <meta name="theme-color" content="#aa7700">
+
+    <script type="text/javascript" src="/js/materialize.min.js"></script>
+</head>
+
+<body class="grey lighten-4">
+
+    <!-- top nav -->
+    <nav class="z-depth-0">
+        <div class="nav-wrapper container">
+            <a href="/">Food<span>Ninja</span></a>
+            <span class="right grey-text text-darken-1">
+                <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
+            </span>
+        </div>
+    </nav>
+
+    <!-- side nav -->
+    <ul id="side-menu" class="sidenav side-menu">
+        <li><a class="subheader">FOODNINJA</a></li>
+        <li><a href="/" class="waves-effect">Home</a></li>
+        <li><a href="/pages/about.html" class="waves-effect">About</a></li>
+        <li>
+            <div class="divider"></div>
+        </li>
+        <li><a href="/pages/contact.html" class="waves-effect">
+                <i class="material-icons">mail_outline</i>Contact</a>
+        </li>
+    </ul>
+
+    <!-- recipes -->
+    <div class="recipes container grey-text text-darken-1">
+        <h6 class="center">Ninja Recipes</h6>
+    </div>
+
+    <div class="center">
+        <a class="btn-floating btn-small btn-large add-btn sidenav-trigger" data-target="side-form">
+            <i class="material-icons">add</i>
+        </a>
+    </div>
+
+    <!-- add recipe side nav -->
+    <div id="side-form" class="sidenav side-form">
+        <form class="add-recipe container section">
+            <h6>New Recipe</h6>
+            <div class="divider"></div>
+            <div class="input-field">
+                <input placeholder="e.g. Ninja soup" id="title" type="text" class="validate">
+                <label for="title">Recipe Title</label>
+            </div>
+            <div class="input-field">
+                <input placeholder="e.g. Tofu, mushroom, garlic" id="ingredients" type="text" class="validate">
+                <label for="ingredients">Ingredients</label>
+            </div>
+            <div class="input-field center">
+                <button class="btn-small">Add</button>
+            </div>
+        </form>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+        import { getFirestore, collection, deleteDoc, getDocs, addDoc, doc, onSnapshot, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjbWPmlG0I9jwnjSJw9l9Rvi37Fc5g58o",
+            authDomain: "food-pwa-test.firebaseapp.com",
+            projectId: "food-pwa-test",
+            storageBucket: "food-pwa-test.appspot.com",
+            messagingSenderId: "616587704236",
+            appId: "1:616587704236:web:a1f5a432686fe2f286ec09"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app)
+
+        // const querySnapshot = await getDocs(collection(db, "recipes"));
+        // querySnapshot.forEach((doc) => {
+        //     // console.log(`${doc.id} => ${doc.data()}`);
+        //     console.log(querySnapshot.docChanges());
+        // });
+
+        // const querySnapshot = onSnapshot(doc(db, "recipes", "O4bBvgOBZ8aQBGpXndGB"), (doc) => {
+        //     console.log("Current data: ", doc.data());
+        // });
+
+        // Offline Data
+        enableIndexedDbPersistence(db)
+            .catch(err => {
+                if (err.code == 'failed-precondition') {
+                    // probably multiple tab open at once
+                    console.log('persistence failed');
+                } else if (err.code == 'unimplemented') {
+                    // Lack of browser support
+                    console.log('persistence is not available');
+                }
+            });
+
+        // Real Time Listner
+        const querySnapshot = onSnapshot(collection(db, "recipes"), (snapshot) => {
+            // console.log("Current data: ", snapshot.docChanges());
+            snapshot.docChanges().forEach(change => {
+                // console.log(change, change.doc.data(), change.doc.id)
+                if (change.type === 'added') {
+                    renderRecipe(change.doc.data(), change.doc.id);
+                }
+                if (change.type === 'removed') {
+                    // remove the document data from the web page
+                    removeRecipe(change.doc.id);
+                }
+            });
+        });
+
+        // db.collection('recipes').onSnapshot(snapshot => {
+        //     console.log(snapshot.docChanges());
+        //     // snapshot.docChanges().forEach(change => {
+        //     //   //console.log(change.type, change.doc.id, change.doc.data());
+        //     //   if(change.type === 'added'){
+        //     //     // add the document data to the web page
+        //     //   }
+        //     //   if(change.type === 'removed'){
+        //     //     // remove the document data from the web page
+        //     //   }
+        //     // });
+        // });
+
+        // add new recipe
+        const form = document.querySelector('form');
+        form.addEventListener('submit', evt => {
+            evt.preventDefault();
+
+            // const recipe = {
+            //     title: form.title.value,
+            //     ingredients: form.ingredients.value
+            // };
+
+            // console.log(recipe);
+            // collection(db, "recipes").add(recipe)
+            //     .catch(err => console.log(err));
+
+            // Add a new document with a generated id.
+            addDoc(collection(db, "recipes"), {
+                title: form.title.value,
+                ingredients: form.ingredients.value
+            });
+
+            form.title.value = '';
+            form.ingredients.value = '';
+        });
+
+        // delete a recipe
+        const recipeContainer = document.querySelector('.recipes');
+        recipeContainer.addEventListener('click', evt => {
+            // console.log(evt);
+            if(evt.target.tagName === 'I'){
+                const id = evt.target.getAttribute('data-id')
+                deleteDoc(doc(db, "recipes", id));
+            }
+        });
+
+    </script>
+    <script src="/js/app.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/db.js"></script>
+</body>
+
+</html>
